@@ -2,6 +2,7 @@ package spare.peetseater.peng;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -50,6 +51,7 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void render() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { Gdx.app.exit(); }
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
