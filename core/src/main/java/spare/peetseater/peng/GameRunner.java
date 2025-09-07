@@ -1,12 +1,20 @@
 package spare.peetseater.peng;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import spare.peetseater.peng.scenes.BattleScene;
+import spare.peetseater.peng.scenes.Scene;
+
+import java.util.Stack;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameRunner implements ApplicationListener {
+    Stack<Scene> scenes;
     @Override
     public void create() {
-
+        Scene scene = new BattleScene();
+        scenes = new Stack<>();
+        scenes.push(scene);
     }
 
     @Override
@@ -18,7 +26,9 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void render() {
-
+        float delta = Gdx.graphics.getDeltaTime();
+        scenes.peek().update(delta);
+        scenes.peek().render(delta);
     }
 
     @Override
@@ -33,6 +43,8 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void dispose() {
-
+        while (!scenes.isEmpty()) {
+           scenes.pop();
+        }
     }
 }
