@@ -16,9 +16,10 @@ import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameRunner implements ApplicationListener {
-    Stack<Scene> scenes;
+    public GameAssets assets;
     public Batch batch;
     OrthographicCamera camera;
+    Stack<Scene> scenes;
     FitViewport viewport;
 
     @Override
@@ -30,6 +31,12 @@ public class GameRunner implements ApplicationListener {
         camera.update();
 
         Scene scene = new BattleScene(this);
+        assets = new GameAssets();
+        assets.queueScene(scene);
+
+        // Force the first scene to load all its assets right away
+        assets.blockingLoad();
+
         scenes = new Stack<>();
         scenes.push(scene);
     }
