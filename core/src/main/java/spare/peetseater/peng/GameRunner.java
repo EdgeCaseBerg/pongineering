@@ -2,17 +2,34 @@ package spare.peetseater.peng;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.peng.scenes.BattleScene;
 import spare.peetseater.peng.scenes.Scene;
 
 import java.util.Stack;
 
+import static spare.peetseater.peng.Constants.VIRTUAL_HEIGHT;
+import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameRunner implements ApplicationListener {
     Stack<Scene> scenes;
+    public Batch batch;
+    OrthographicCamera camera;
+    FitViewport viewport;
+
     @Override
     public void create() {
-        Scene scene = new BattleScene();
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+        camera.setToOrtho(false);
+        camera.update();
+
+        Scene scene = new BattleScene(this);
         scenes = new Stack<>();
         scenes.push(scene);
     }
@@ -26,9 +43,15 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void render() {
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         float delta = Gdx.graphics.getDeltaTime();
         scenes.peek().update(delta);
+
+        batch.begin();
         scenes.peek().render(delta);
+        batch.end();
     }
 
     @Override
