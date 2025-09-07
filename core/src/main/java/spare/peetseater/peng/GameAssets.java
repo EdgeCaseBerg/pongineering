@@ -35,7 +35,7 @@ public class GameAssets {
     public BitmapFont getFont(AssetDescriptor<BitmapFont> key) {
         BitmapFont font;
         if (!assetManager.isLoaded(key)) {
-            Gdx.app.log("ASSETS", String.format("Failed to load key %s", key.toString()));
+            Gdx.app.log(getClass().getSimpleName(), String.format("Failed to load key %s", key.toString()));
             font = new BitmapFont();
         } else {
             font = assetManager.get(key);
@@ -62,5 +62,20 @@ public class GameAssets {
     public static final AssetDescriptor<BitmapFont> scoreFont = visitorFontDescriptor(72, SCORE_FONT_KEY);
 
     public static final String RED_PADDLE_FILE = "red-paddle.png";
-    public static  final AssetDescriptor<Texture> redPaddle = new AssetDescriptor<>(RED_PADDLE_FILE, Texture.class);
+    public static final AssetDescriptor<Texture> redPaddle = new AssetDescriptor<>(RED_PADDLE_FILE, Texture.class);
+
+    private static final String BLUE_PADDLE_FILE = "blue-paddle.png";
+    public static final AssetDescriptor<Texture> bluePaddle = new AssetDescriptor<>(BLUE_PADDLE_FILE, Texture.class);
+
+    private static final String BALL_FILE = "ball.png";
+    public static final AssetDescriptor<Texture> ball = new AssetDescriptor<>(BALL_FILE, Texture.class);
+
+    public Texture getTexture(AssetDescriptor<Texture> assetDescriptor) {
+        if (!assetManager.isLoaded(assetDescriptor)) {
+            String reason = String.format("Could not load texture asset %s. Is the scene misconfigured?", assetDescriptor.toString());
+            Gdx.app.log(getClass().getSimpleName(), reason);
+            throw new RuntimeException(String.format("THE DEV IS AN IDIOT: %s", reason));
+        }
+        return assetManager.get(assetDescriptor);
+    }
 }
