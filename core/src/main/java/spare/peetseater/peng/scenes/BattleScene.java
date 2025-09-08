@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
+import spare.peetseater.peng.objects.Ball;
 import spare.peetseater.peng.objects.Paddle;
 
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public class BattleScene implements Scene {
     private final GameRunner gameRunner;
     Paddle red;
     Paddle blue;
+    Ball ball;
     int p1Score;
     int p2Score;
     List<AssetDescriptor<?>> assets;
@@ -36,6 +38,7 @@ public class BattleScene implements Scene {
 
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
+        ball = new Ball(VIRTUAL_WIDTH/2f, VIRTUAL_HEIGHT/2f);
 
         assets = new LinkedList<>();
         assets.add(GameAssets.scoreFont);
@@ -76,11 +79,11 @@ public class BattleScene implements Scene {
         );
         Texture redTexture = gameRunner.assets.getTexture(GameAssets.redPaddle);
         Texture blueTexture = gameRunner.assets.getTexture(GameAssets.bluePaddle);
-        Texture ball = gameRunner.assets.getTexture(GameAssets.ball);
+        Texture ballTexture = gameRunner.assets.getTexture(GameAssets.ball);
 
         gameRunner.batch.draw(redTexture, red.getX(), red.getY(), Paddle.WIDTH, Paddle.HEIGHT);
         gameRunner.batch.draw(blueTexture, blue.getX(), blue.getY(), Paddle.WIDTH, Paddle.HEIGHT);
-        gameRunner.batch.draw(ball, Gdx.graphics.getWidth() / 2f, 500, 18, 18);
+        gameRunner.batch.draw(ballTexture, ball.getAnchorX(), ball.getAnchorY(), Ball.CIRCUMFERENCE, Ball.CIRCUMFERENCE);
     }
 
     @Override
