@@ -2,6 +2,7 @@ package spare.peetseater.peng.scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,13 +13,19 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
+import spare.peetseater.peng.objects.Paddle;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static spare.peetseater.peng.Constants.VIRTUAL_HEIGHT;
+import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
+
 public class BattleScene implements Scene {
 
     private final GameRunner gameRunner;
+    Paddle red;
+    Paddle blue;
     int p1Score;
     int p2Score;
     List<AssetDescriptor<?>> assets;
@@ -26,6 +33,9 @@ public class BattleScene implements Scene {
     public BattleScene(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
         p1Score = p2Score = 0;
+
+        red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
+        blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
 
         assets = new LinkedList<>();
         assets.add(GameAssets.scoreFont);
@@ -38,6 +48,18 @@ public class BattleScene implements Scene {
     public void update(float delta) {
         p1Score += 1;
         p2Score -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            red.moveUp(delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            red.moveDown(delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            blue.moveUp(delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            blue.moveDown(delta);
+        }
     }
 
     @Override
@@ -52,12 +74,12 @@ public class BattleScene implements Scene {
             Align.center,
             false
         );
-        Texture p1 = gameRunner.assets.getTexture(GameAssets.redPaddle);
-        Texture p2 = gameRunner.assets.getTexture(GameAssets.bluePaddle);
+        Texture redTexture = gameRunner.assets.getTexture(GameAssets.redPaddle);
+        Texture blueTexture = gameRunner.assets.getTexture(GameAssets.bluePaddle);
         Texture ball = gameRunner.assets.getTexture(GameAssets.ball);
-        gameRunner.batch.draw(p1, 0, Gdx.graphics.getHeight() - font.getLineHeight() * 1.5f, Gdx.graphics.getWidth(), 1);
-        gameRunner.batch.draw(p1, 18, 50, 18, 72);
-        gameRunner.batch.draw(p2, Gdx.graphics.getWidth() - 18 - 18, 150, 18, 72);
+
+        gameRunner.batch.draw(redTexture, red.getX(), red.getY(), Paddle.WIDTH, Paddle.HEIGHT);
+        gameRunner.batch.draw(blueTexture, blue.getX(), blue.getY(), Paddle.WIDTH, Paddle.HEIGHT);
         gameRunner.batch.draw(ball, Gdx.graphics.getWidth() / 2f, 500, 18, 18);
     }
 
