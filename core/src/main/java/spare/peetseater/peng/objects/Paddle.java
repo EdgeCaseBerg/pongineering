@@ -69,9 +69,8 @@ public class Paddle {
         float normalizedBallY = Math.max(0, yTouchPoint - y); // this shouldn't go negative, but just in case.
 
         boolean paddleToTheLeft = x <= ball.getAnchorX() + Ball.RADIUS;
-        float amplitude = MathUtils.degreesToRadians * 90;
-        float shift = paddleToTheLeft ? 0 : MathUtils.PI;
-
+        float amplitude = MathUtils.degreesToRadians * (90 - 15);
+        float shift = (paddleToTheLeft ? 0 : MathUtils.PI) + MathUtils.degreesToRadians * 15;
         float radians = amplitude * MathUtils.sin(MathUtils.PI/HEIGHT * normalizedBallY) + shift;
         return radians;
     }
