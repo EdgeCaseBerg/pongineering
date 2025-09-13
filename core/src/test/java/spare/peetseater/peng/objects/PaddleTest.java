@@ -58,4 +58,20 @@ class PaddleTest {
         float radians = right.getBounceAngle(ball);
         assertEquals(270 - 15, radians * MathUtils.radiansToDegrees, EPSILON);
     }
+
+    @Test
+    void test75DegreesLeftPaddleAtHeight() {
+        Paddle left = new Paddle(10,60);
+        Ball ball = new Ball(10, 60 + Paddle.HEIGHT);
+        float radians = left.getBounceAngle(ball);
+        assertEquals(75, radians * MathUtils.radiansToDegrees, EPSILON);
+    }
+
+    @Test
+    void test75DegreesRightPaddleAtHeight() {
+        Paddle right = new Paddle(100, 100);
+        Ball ball = new Ball(100 - Ball.CIRCUMFERENCE, 100 + Paddle.HEIGHT);
+        float radians = right.getBounceAngle(ball);
+        assertEquals(90 + 15, radians * MathUtils.radiansToDegrees, EPSILON);
+    }
 }
