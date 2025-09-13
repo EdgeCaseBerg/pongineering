@@ -66,7 +66,7 @@ public class Paddle {
     public float getBounceAngle(Ball ball) {
         // use center point for bounce determination!
         float yTouchPoint = ball.getAnchorY() + Ball.RADIUS;
-        float normalizedBallY = Math.min(0, yTouchPoint - y); // this shouldn't go negative, but just in case.
+        float normalizedBallY = Math.max(0, yTouchPoint - y); // this shouldn't go negative, but just in case.
 
         boolean paddleToTheLeft = x <= ball.getAnchorX() + Ball.RADIUS;
         float amplitude = MathUtils.degreesToRadians * 90;
