@@ -1,5 +1,7 @@
 package spare.peetseater.peng.objects;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import static spare.peetseater.peng.Constants.VIRTUAL_HEIGHT;
 
 public class Paddle {
@@ -47,5 +49,30 @@ public class Paddle {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public boolean intersects(Ball ball) {
+        // For the time being, proper square check
+        float pLeftX = ball.getAnchorX();
+        float pLeftY = ball.getAnchorY();
+        float pRightX = pLeftX + Ball.CIRCUMFERENCE;
+        float pRightY = pLeftY + Ball.CIRCUMFERENCE;
+
+        boolean overlapsXProjection = pRightX >= x && (x + WIDTH) >= pLeftX;
+        boolean overlapsYProjection = pRightY >= y && (y + HEIGHT) >= pLeftY;
+        return overlapsXProjection && overlapsYProjection;
+    }
+
+    public float getBounceAngle(Ball ball) {
+        // use center point for bounce determination!
+        float yTouchPoint = ball.getAnchorY() + Ball.RADIUS;
+        float normalizedBallY = Math.min(0, yTouchPoint - y); // this shouldn't go negative, but just in case.
+
+        boolean paddleToTheLeft = x <= ball.getAnchorX() + Ball.RADIUS;
+        float amplitude = MathUtils.degreesToRadians * 90;
+        float shift = paddleToTheLeft ? 0 : MathUtils.PI;
+
+        float radians = amplitude * MathUtils.sin(MathUtils.PI/HEIGHT * normalizedBallY) + shift;
+        return radians;
     }
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
@@ -39,6 +40,7 @@ public class BattleScene implements Scene {
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
         ball = new Ball(VIRTUAL_WIDTH/2f, VIRTUAL_HEIGHT/2f);
+        ball.setVelocity(new Vector2(MathUtils.random() * VIRTUAL_WIDTH * 0.5f, MathUtils.random() * VIRTUAL_HEIGHT * 0.6f));
 
         assets = new LinkedList<>();
         assets.add(GameAssets.scoreFont);
@@ -63,6 +65,22 @@ public class BattleScene implements Scene {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             blue.moveDown(delta);
         }
+        if (red.intersects(ball)) {
+            ball.bounceOffOf(red);
+        }
+        if (blue.intersects(ball)) {
+            ball.bounceOffOf(blue);
+        }
+//        if (top.intersects(ball) || bottom.intersect(ball)) {
+//            // bounce ball off non scoring walls
+//        }
+//        if (ball.toTheLeftOf(red)) {
+//            // Score a point for blue.
+//        }
+//        if (ball.toTheRightOf(blue)) {
+//            // Score a point for red
+//        }
+        ball.update(delta);
     }
 
     @Override
