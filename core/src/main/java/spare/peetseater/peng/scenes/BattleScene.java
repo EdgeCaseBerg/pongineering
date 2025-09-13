@@ -71,6 +71,14 @@ public class BattleScene implements Scene {
         if (blue.intersects(ball)) {
             ball.bounceOffOf(blue);
         }
+        if (ball.getAnchorX() < 0 || (ball.getAnchorX() + ball.CIRCUMFERENCE) > VIRTUAL_WIDTH ) {
+            ball = new Ball(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2);
+            ball.setVelocity(new Vector2(- Ball.INITIAL_SPEED, 0f));
+        }
+        if (ball.getAnchorY() < 0 || (ball.getAnchorY() + ball.CIRCUMFERENCE) > VIRTUAL_HEIGHT ) {
+            ball = new Ball(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2);
+            ball.setVelocity(new Vector2(- Ball.INITIAL_SPEED, 0f));
+        }
 //        if (top.intersects(ball) || bottom.intersect(ball)) {
 //            // bounce ball off non scoring walls
 //        }

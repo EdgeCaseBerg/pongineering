@@ -48,10 +48,6 @@ class PaddleTest {
         Paddle left = new Paddle(10,60);
         Ball ball = new Ball(10, 60);
         float radians = left.getBounceAngle(ball);
-        for (int i = 0; i <= Paddle.HEIGHT; i++) {
-            System.err.println(String.format("%d,%f", i, MathUtils.radiansToDegrees * left.getBounceAngle(new Ball(10 - Ball.CIRCUMFERENCE, 60 + i))));
-        }
-
         assertEquals(270 + 15, radians * MathUtils.radiansToDegrees, EPSILON);
     }
 
