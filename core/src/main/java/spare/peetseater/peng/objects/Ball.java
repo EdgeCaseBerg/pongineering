@@ -23,9 +23,6 @@ public class Ball {
     public void update(float delta) {
         x += v.x * delta;
         y += v.y * delta;
-        // tmp
-        x = x % VIRTUAL_WIDTH;
-        y = y % VIRTUAL_HEIGHT;
     }
 
     public void setVelocity(Vector2 velocity) {
@@ -47,7 +44,7 @@ public class Ball {
         // TODO: add speed multiplier
         float radians =  paddle.getBounceAngle(this);
         float dx = MathUtils.cos(radians);
-        float dy =MathUtils.sin(radians);
+        float dy = MathUtils.sin(radians);
         v.x = dx * INITIAL_SPEED;
         v.y = dy * INITIAL_SPEED;
     }
