@@ -64,11 +64,14 @@ public class GameAssets {
     public static final String RED_PADDLE_FILE = "red-paddle.png";
     public static final AssetDescriptor<Texture> redPaddle = new AssetDescriptor<>(RED_PADDLE_FILE, Texture.class);
 
-    private static final String BLUE_PADDLE_FILE = "blue-paddle.png";
+    public static final String BLUE_PADDLE_FILE = "blue-paddle.png";
     public static final AssetDescriptor<Texture> bluePaddle = new AssetDescriptor<>(BLUE_PADDLE_FILE, Texture.class);
 
-    private static final String BALL_FILE = "ball.png";
+    public static final String BALL_FILE = "ball.png";
     public static final AssetDescriptor<Texture> ball = new AssetDescriptor<>(BALL_FILE, Texture.class);
+
+    public static final String WALL_FILE = "wall.png";
+    public static final AssetDescriptor<Texture> wall = new AssetDescriptor<>(WALL_FILE, Texture.class);
 
     public Texture getTexture(AssetDescriptor<Texture> assetDescriptor) {
         if (!assetManager.isLoaded(assetDescriptor)) {
