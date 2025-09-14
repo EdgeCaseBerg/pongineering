@@ -98,6 +98,16 @@ public class GameAssets {
     public static final String BOUNCE_SFX_7 = "sounds/bounce-7.mp3";
     public static final AssetDescriptor<Sound> bounce7 = new AssetDescriptor<>(BOUNCE_SFX_7, Sound.class);
 
+    public static final AssetDescriptor<Sound> defenseisnotyour = new AssetDescriptor<>("sounds/defenseisnotyour.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> dobetter = new AssetDescriptor<>("sounds/dobetter.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> dontletheballthrough = new AssetDescriptor<>("sounds/dontletheballthrough.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> goodjob = new AssetDescriptor<>("sounds/goodjob.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> niceOne = new AssetDescriptor<>("sounds/nice-one.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> score = new AssetDescriptor<>("sounds/score.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> shameful = new AssetDescriptor<>("sounds/shameful.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> soClose = new AssetDescriptor<>("sounds/so-close.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> victoryIsNigh = new AssetDescriptor<>("sounds/victory-is-nigh.mp3", Sound.class);
+    public static final AssetDescriptor<Sound> youresupposedtohittheball = new AssetDescriptor<>("sounds/youresupposedtohittheball.mp3", Sound.class);
 
     public Sound getSound(AssetDescriptor<Sound> assetDescriptor) {
         if (!assetManager.isLoaded(assetDescriptor)) {
