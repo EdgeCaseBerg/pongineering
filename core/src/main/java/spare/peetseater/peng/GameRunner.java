@@ -31,7 +31,7 @@ public class GameRunner implements ApplicationListener {
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         camera.setToOrtho(false);
         camera.update();
-        
+
         Scene scene = new TitleScreen(this);
         assets = new GameAssets();
         assets.queueScene(scene);

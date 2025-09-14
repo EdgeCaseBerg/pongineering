@@ -61,6 +61,9 @@ public class GameAssets {
     public static final String SCORE_FONT_KEY = "scorefont.ttf";
     public static final AssetDescriptor<BitmapFont> scoreFont = visitorFontDescriptor(72, SCORE_FONT_KEY);
 
+    public static final String COUNTDOWN_FONT_KEY = "countdownfont.ttf";
+    public static final AssetDescriptor<BitmapFont> countdownFont = visitorFontDescriptor(200, COUNTDOWN_FONT_KEY);
+
     public static final String RED_PADDLE_FILE = "red-paddle.png";
     public static final AssetDescriptor<Texture> redPaddle = new AssetDescriptor<>(RED_PADDLE_FILE, Texture.class);
 

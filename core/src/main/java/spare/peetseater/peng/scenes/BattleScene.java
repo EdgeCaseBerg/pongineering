@@ -1,5 +1,6 @@
 package spare.peetseater.peng.scenes;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
 import spare.peetseater.peng.objects.Ball;
+import spare.peetseater.peng.objects.Countdown;
 import spare.peetseater.peng.objects.Paddle;
 
 import java.util.LinkedList;
@@ -30,6 +32,7 @@ public class BattleScene implements Scene {
     int redScore;
     int blueScore;
     List<AssetDescriptor<?>> assets;
+    Countdown countdown;
 
     public BattleScene(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
@@ -38,13 +41,19 @@ public class BattleScene implements Scene {
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
         resetBall();
+        resetCountdown();
 
         assets = new LinkedList<>();
         assets.add(GameAssets.scoreFont);
+        assets.add(GameAssets.countdownFont);
         assets.add(GameAssets.redPaddle);
         assets.add(GameAssets.bluePaddle);
         assets.add(GameAssets.wall);
         assets.add(GameAssets.ball);
+    }
+
+    private void resetCountdown() {
+        countdown = new Countdown(3);
     }
 
     private void resetBall() {
@@ -54,6 +63,7 @@ public class BattleScene implements Scene {
 
     @Override
     public void update(float delta) {
+
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             red.moveUp(delta);
         }
@@ -83,12 +93,19 @@ public class BattleScene implements Scene {
         if (ball.toTheLeftOf(red)) {
             blueScore += 1;
             resetBall();
+            resetCountdown();
         }
         if (ball.toTheRightOf(blue)) {
             redScore += 1;
             resetBall();
+            resetCountdown();
         }
-        ball.update(delta);
+
+        if (countdown.isCountingDown()) {
+            countdown.update(delta);
+        } else {
+            ball.update(delta);
+        }
     }
 
     @Override
@@ -103,6 +120,7 @@ public class BattleScene implements Scene {
             Align.center,
             false
         );
+
         Texture redTexture = gameRunner.assets.getTexture(GameAssets.redPaddle);
         Texture blueTexture = gameRunner.assets.getTexture(GameAssets.bluePaddle);
         Texture ballTexture = gameRunner.assets.getTexture(GameAssets.ball);
@@ -121,6 +139,23 @@ public class BattleScene implements Scene {
         gameRunner.batch.draw(ballTexture, ball.getAnchorX(), ball.getAnchorY(), Ball.CIRCUMFERENCE, Ball.CIRCUMFERENCE);
         gameRunner.batch.draw(redTexture, red.getX(), red.getY(), Paddle.WIDTH, Paddle.HEIGHT);
         gameRunner.batch.draw(blueTexture, blue.getX(), blue.getY(), Paddle.WIDTH, Paddle.HEIGHT);
+
+
+        if (countdown.isCountingDown()) {
+            BitmapFont countdownFont = gameRunner.assets.getFont(GameAssets.countdownFont);
+            Color toRestore = countdownFont.getColor().cpy();
+            countdownFont.setColor(Color.YELLOW);
+            countdownFont.draw(
+                gameRunner.batch,
+                String.format("%d", countdown.getSecondToDisplay()),
+                0f, VIRTUAL_HEIGHT / 2f,
+                VIRTUAL_WIDTH,
+                Align.center,
+                false
+            );
+            countdownFont.setColor(toRestore);
+        }
+
     }
 
     @Override

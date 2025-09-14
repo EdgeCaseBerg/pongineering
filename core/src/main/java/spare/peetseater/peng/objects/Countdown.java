@@ -21,4 +21,8 @@ public class Countdown {
     public int getSecondToDisplay() {
         return currentSecond;
     }
+
+    public boolean isCountingDown() {
+        return currentSecond != 0;
+    }
 }
