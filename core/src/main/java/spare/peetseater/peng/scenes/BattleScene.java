@@ -63,6 +63,9 @@ public class BattleScene implements Scene {
         for (AssetDescriptor<?> soundAsset : sounds.bounceAssets()) {
             assets.add(soundAsset);
         }
+        for (AssetDescriptor<?> soundAsset : sounds.scoreAssets()) {
+            assets.add(soundAsset);
+        }
     }
 
     private void resetCountdown() {
@@ -136,17 +139,25 @@ public class BattleScene implements Scene {
             gameRunner.assets.getSound(sfx).play();
         }
 
+        boolean scored = false;
         if (ball.toTheLeftOf(red)) {
+            scored = true;
             blueScore += 1;
             sendBallTo = ToReceive.Blue;
             resetBall();
             resetCountdown();
         }
         if (ball.toTheRightOf(blue)) {
+            scored = true;
             redScore += 1;
             sendBallTo = ToReceive.Red;
             resetBall();
             resetCountdown();
+        }
+
+        if (scored) {
+            AssetDescriptor<Sound> sfx = sounds.nextScore();
+            gameRunner.assets.getSound(sfx).play();
         }
 
         if (redScore >= 5 || blueScore >= 5) {

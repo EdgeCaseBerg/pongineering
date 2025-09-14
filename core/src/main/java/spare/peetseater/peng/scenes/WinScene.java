@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
+import spare.peetseater.peng.Sounds;
 import spare.peetseater.peng.objects.Ball;
 
 import java.util.LinkedList;
@@ -20,13 +21,16 @@ import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
 
 public class WinScene implements Scene {
     private final GameRunner gameRunner;
+    private Sounds sounds;
     private final String message;
     private final List<AssetDescriptor<?>> requiredAssets;
     private int selectedButton;
     public final int REMATCH_CHOICE = 0;
     public final int TO_TITLE_CHOICE = 1;
+    boolean hasPlayedSFX = false;
 
     public WinScene(GameRunner gameRunner, String msg) {
+        this.sounds = new Sounds();
         this.gameRunner = gameRunner;
         this.message = msg;
         this.selectedButton = 0;
@@ -34,10 +38,15 @@ public class WinScene implements Scene {
         requiredAssets.add(GameAssets.scoreFont);
         requiredAssets.add(GameAssets.countdownFont);
         requiredAssets.add(GameAssets.wall);
+        requiredAssets.addAll(sounds.winAssets());
     }
 
     @Override
     public void update(float delta) {
+        if (!hasPlayedSFX) {
+            gameRunner.assets.getSound(sounds.nextWin()).play();
+            hasPlayedSFX = true;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             selectedButton -= 1;
             selectedButton = Math.max(0, selectedButton);

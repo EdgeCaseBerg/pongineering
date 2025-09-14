@@ -109,6 +109,20 @@ public class GameAssets {
     public static final AssetDescriptor<Sound> victoryIsNigh = new AssetDescriptor<>("sounds/victory-is-nigh.mp3", Sound.class);
     public static final AssetDescriptor<Sound> youresupposedtohittheball = new AssetDescriptor<>("sounds/youresupposedtohittheball.mp3", Sound.class);
 
+
+    public static final String WIN_SCREEN_SFX_1 = "sounds/areYouProudOfThatPerformance.mp3";
+    public static final AssetDescriptor<Sound> areYouProudOfThatPerformance = new AssetDescriptor<>(WIN_SCREEN_SFX_1, Sound.class);
+    public static final String WIN_SCREEN_SFX_2 = "sounds/congratsOldBoy.mp3";
+    public static final AssetDescriptor<Sound> congratsOldBoy = new AssetDescriptor<>(WIN_SCREEN_SFX_2, Sound.class);
+    public static final String WIN_SCREEN_SFX_3 = "sounds/congratulationsYouWon.mp3";
+    public static final AssetDescriptor<Sound> congratulationsYouWon = new AssetDescriptor<>(WIN_SCREEN_SFX_3, Sound.class);
+    public static final String WIN_SCREEN_SFX_4 = "sounds/haYouDidIt.mp3";
+    public static final AssetDescriptor<Sound> haYouDidIt = new AssetDescriptor<>(WIN_SCREEN_SFX_4, Sound.class);
+    public static final String WIN_SCREEN_SFX_5 = "sounds/takeThatLyingDown.mp3";
+    public static final AssetDescriptor<Sound> takeThatLyingDown = new AssetDescriptor<>(WIN_SCREEN_SFX_5, Sound.class);
+    public static final String WIN_SCREEN_SFX_6 = "sounds/youWon.mp3";
+    public static final AssetDescriptor<Sound> youWon = new AssetDescriptor<>(WIN_SCREEN_SFX_6, Sound.class);
+
     public Sound getSound(AssetDescriptor<Sound> assetDescriptor) {
         if (!assetManager.isLoaded(assetDescriptor)) {
             String reason = String.format("Could not load sound asset %s. Is the scene misconfigured?", assetDescriptor.toString());
