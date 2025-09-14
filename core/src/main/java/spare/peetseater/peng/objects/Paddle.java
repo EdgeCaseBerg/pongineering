@@ -3,6 +3,7 @@ package spare.peetseater.peng.objects;
 import com.badlogic.gdx.math.MathUtils;
 
 import static spare.peetseater.peng.Constants.VIRTUAL_HEIGHT;
+import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
 
 public class Paddle {
     float x;
@@ -18,23 +19,20 @@ public class Paddle {
 
     public void moveUp(float delta) {
         float yShift = speed * delta;
-        if (yShift + y + HEIGHT < VIRTUAL_HEIGHT) {
-            y += yShift;
+        y += yShift;
+        if (y + HEIGHT > VIRTUAL_HEIGHT) {
+            y = VIRTUAL_HEIGHT - HEIGHT;
         }
     }
 
     public void moveDown(float delta) {
         float yShift = speed * delta;
-        if (y - yShift > 0) {
-            y -= yShift;
+        y -= yShift;
+        if (y < 0) {
+            y = 0;
         }
     }
 
-    /*
-    public boolean intersects(Ball ball) {
-        // TODO: usual code here
-    }
-    */
     public float getX() {
         return x;
     }
