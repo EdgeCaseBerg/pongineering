@@ -48,4 +48,20 @@ public class Ball {
         v.x = dx * INITIAL_SPEED;
         v.y = dy * INITIAL_SPEED;
     }
+
+    public void bounceUp() {
+        v.y = -1 * v.y;
+    }
+
+    public void bounceDown() {
+        v.y = -1 * v.y;
+    }
+
+    public boolean toTheLeftOf(Paddle paddle) {
+        return x + RADIUS < paddle.getX();
+    }
+
+    public boolean toTheRightOf(Paddle paddle) {
+        return x - RADIUS > paddle.getX();
+    }
 }
