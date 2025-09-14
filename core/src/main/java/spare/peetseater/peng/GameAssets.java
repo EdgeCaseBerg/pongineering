@@ -81,4 +81,27 @@ public class GameAssets {
         }
         return assetManager.get(assetDescriptor);
     }
+
+    public boolean isLoaded(Scene topScene) {
+        boolean allLoaded = assetManager.update(17);
+        // All assets are loaded?
+        if (!allLoaded) {
+            // No, but are all the assets for THIS scene loaded?
+            boolean allSceneAssetsLoaded = true;
+            for(AssetDescriptor<?> asset : topScene.requiredAssets()) {
+                allSceneAssetsLoaded = allSceneAssetsLoaded && assetManager.isLoaded(asset);
+                if (!allSceneAssetsLoaded) {
+                    break;
+                }
+            }
+            return allSceneAssetsLoaded;
+        }
+        return allLoaded;
+    }
+
+    public void unload(Scene scene) {
+        for (AssetDescriptor<?> assetDescriptor : scene.requiredAssets()) {
+            assetManager.unload(assetDescriptor.fileName);
+        }
+    }
 }

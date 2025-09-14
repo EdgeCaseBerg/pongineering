@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.peng.scenes.BattleScene;
 import spare.peetseater.peng.scenes.Scene;
+import spare.peetseater.peng.scenes.TitleScreen;
 
 import java.util.Stack;
 
@@ -30,8 +31,8 @@ public class GameRunner implements ApplicationListener {
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         camera.setToOrtho(false);
         camera.update();
-
-        Scene scene = new BattleScene(this);
+        
+        Scene scene = new TitleScreen(this);
         assets = new GameAssets();
         assets.queueScene(scene);
 
@@ -40,6 +41,23 @@ public class GameRunner implements ApplicationListener {
 
         scenes = new Stack<>();
         scenes.push(scene);
+    }
+
+    public void changeToNewScene(Scene newScene) {
+        assets.queueScene(newScene);
+        // TODO: swap to a loading screen here.
+        // For now, just block then swap.
+        assets.blockingLoad();
+        if (!scenes.isEmpty()) {
+            Scene oldScene = scenes.pop();
+            assets.unload(oldScene);
+        };
+        scenes.push(newScene);
+    }
+
+    public boolean sceneIsReady() {
+        Scene topScene = scenes.peek();
+        return assets.isLoaded(topScene);
     }
 
     @Override
@@ -52,6 +70,7 @@ public class GameRunner implements ApplicationListener {
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) { Gdx.app.exit(); }
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
