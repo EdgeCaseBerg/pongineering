@@ -1,9 +1,9 @@
 package spare.peetseater.peng.scenes;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
+import spare.peetseater.peng.Sounds;
 import spare.peetseater.peng.objects.Ball;
 import spare.peetseater.peng.objects.Countdown;
 import spare.peetseater.peng.objects.Paddle;
@@ -39,9 +40,11 @@ public class BattleScene implements Scene {
     int blueScore;
     List<AssetDescriptor<?>> assets;
     Countdown countdown;
+    Sounds sounds;
 
     public BattleScene(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
+        sounds = new Sounds();
         redScore = blueScore = 0;
 
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
@@ -57,6 +60,9 @@ public class BattleScene implements Scene {
         assets.add(GameAssets.bluePaddle);
         assets.add(GameAssets.wall);
         assets.add(GameAssets.ball);
+        for (AssetDescriptor<?> soundAsset : sounds.bounceAssets()) {
+            assets.add(soundAsset);
+        }
     }
 
     private void resetCountdown() {
@@ -103,20 +109,33 @@ public class BattleScene implements Scene {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             blue.moveDown(delta);
         }
+
+        boolean bounced = false;
+
         if (red.intersects(ball)) {
             ball.bounceOffOf(red);
+            bounced = true;
         }
         if (blue.intersects(ball)) {
             ball.bounceOffOf(blue);
+            bounced = true;
         }
 
         // bounce ball off non scoring walls
         if (ball.getAnchorY() <= 0) {
             ball.bounceUp();
+            bounced = true;
         }
         if (ball.getAnchorY() + Ball.CIRCUMFERENCE >= VIRTUAL_HEIGHT) {
             ball.bounceDown();
+            bounced = true;
         }
+
+        if (bounced) {
+            AssetDescriptor<Sound> sfx = sounds.nextBounce();
+            gameRunner.assets.getSound(sfx).play();
+        }
+
         if (ball.toTheLeftOf(red)) {
             blueScore += 1;
             sendBallTo = ToReceive.Blue;
@@ -130,9 +149,10 @@ public class BattleScene implements Scene {
             resetCountdown();
         }
 
-        if (redScore >= 10 || blueScore >= 10) {
-            // TODO send us to the new winner screen!
-            gameRunner.changeToNewScene(new TitleScreen(gameRunner));
+        if (redScore >= 5 || blueScore >= 5) {
+            String msg = redScore < blueScore ? "Blue" : "Red";
+            msg += " wins!";
+            gameRunner.changeToNewScene(new WinScene(gameRunner, msg));
         }
 
         if (countdown.isCountingDown()) {

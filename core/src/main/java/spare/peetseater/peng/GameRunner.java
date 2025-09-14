@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.peng.scenes.BattleScene;
 import spare.peetseater.peng.scenes.Scene;
 import spare.peetseater.peng.scenes.TitleScreen;
+import spare.peetseater.peng.scenes.WinScene;
 
 import java.util.Stack;
 

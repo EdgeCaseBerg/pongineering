@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -75,6 +76,37 @@ public class GameAssets {
 
     public static final String WALL_FILE = "wall.png";
     public static final AssetDescriptor<Texture> wall = new AssetDescriptor<>(WALL_FILE, Texture.class);
+
+    public static final String BOUNCE_SFX_1 = "sounds/bounce-1.mp3";
+    public static final AssetDescriptor<Sound> bounce1 = new AssetDescriptor<>(BOUNCE_SFX_1, Sound.class);
+
+    public static final String BOUNCE_SFX_2 = "sounds/bounce-2.mp3";
+    public static final AssetDescriptor<Sound> bounce2 = new AssetDescriptor<>(BOUNCE_SFX_2, Sound.class);
+
+    public static final String BOUNCE_SFX_3 = "sounds/bounce-3.mp3";
+    public static final AssetDescriptor<Sound> bounce3 = new AssetDescriptor<>(BOUNCE_SFX_3, Sound.class);
+
+    public static final String BOUNCE_SFX_4 = "sounds/bounce-4.mp3";
+    public static final AssetDescriptor<Sound> bounce4 = new AssetDescriptor<>(BOUNCE_SFX_4, Sound.class);
+
+    public static final String BOUNCE_SFX_5 = "sounds/bounce-5.mp3";
+    public static final AssetDescriptor<Sound> bounce5 = new AssetDescriptor<>(BOUNCE_SFX_5, Sound.class);
+
+    public static final String BOUNCE_SFX_6 = "sounds/bounce-6.mp3";
+    public static final AssetDescriptor<Sound> bounce6 = new AssetDescriptor<>(BOUNCE_SFX_6, Sound.class);
+
+    public static final String BOUNCE_SFX_7 = "sounds/bounce-7.mp3";
+    public static final AssetDescriptor<Sound> bounce7 = new AssetDescriptor<>(BOUNCE_SFX_7, Sound.class);
+
+
+    public Sound getSound(AssetDescriptor<Sound> assetDescriptor) {
+        if (!assetManager.isLoaded(assetDescriptor)) {
+            String reason = String.format("Could not load sound asset %s. Is the scene misconfigured?", assetDescriptor.toString());
+            Gdx.app.log(getClass().getSimpleName(), reason);
+            throw new RuntimeException(String.format("THE DEV IS AN IDIOT: %s", reason));
+        }
+        return assetManager.get(assetDescriptor);
+    }
 
     public Texture getTexture(AssetDescriptor<Texture> assetDescriptor) {
         if (!assetManager.isLoaded(assetDescriptor)) {
