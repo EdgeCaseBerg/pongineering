@@ -25,6 +25,12 @@ import static spare.peetseater.peng.Constants.VIRTUAL_WIDTH;
 
 public class BattleScene implements Scene {
 
+    enum ToReceive {
+        Red,
+        Blue
+    };
+    ToReceive sendBallTo;
+
     private final GameRunner gameRunner;
     Paddle red;
     Paddle blue;
@@ -40,6 +46,7 @@ public class BattleScene implements Scene {
 
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
+        sendBallTo = MathUtils.randomBoolean() ? ToReceive.Blue : ToReceive.Red;
         resetBall();
         resetCountdown();
 
@@ -58,7 +65,27 @@ public class BattleScene implements Scene {
 
     private void resetBall() {
         ball = new Ball(VIRTUAL_WIDTH/2f, VIRTUAL_HEIGHT/2f);
-        ball.setVelocity(new Vector2(MathUtils.random() * VIRTUAL_WIDTH * 0.5f, MathUtils.random() * VIRTUAL_HEIGHT * 0.6f));
+        float from, to;
+        switch (sendBallTo) {
+            case Red:
+                from   = MathUtils.degreesToRadians * 120;
+                to = MathUtils.degreesToRadians * 240;
+                break;
+            case Blue:
+            default:
+                from = MathUtils.degreesToRadians * 300;
+                to   = MathUtils.degreesToRadians * (360 + 60);
+                break;
+        }
+        float angle = MathUtils.lerpAngle(from, to, MathUtils.random());
+        float speedX = VIRTUAL_WIDTH * 0.5f;
+        float speedY = VIRTUAL_HEIGHT * 0.6f;
+        ball.setVelocity(
+            new Vector2(
+                MathUtils.cos(angle) * speedX,
+                MathUtils.sin(angle) * speedY
+            )
+        );
     }
 
     @Override
@@ -92,13 +119,20 @@ public class BattleScene implements Scene {
         }
         if (ball.toTheLeftOf(red)) {
             blueScore += 1;
+            sendBallTo = ToReceive.Blue;
             resetBall();
             resetCountdown();
         }
         if (ball.toTheRightOf(blue)) {
             redScore += 1;
+            sendBallTo = ToReceive.Red;
             resetBall();
             resetCountdown();
+        }
+
+        if (redScore >= 10 || blueScore >= 10) {
+            // TODO send us to the new winner screen!
+            gameRunner.changeToNewScene(new TitleScreen(gameRunner));
         }
 
         if (countdown.isCountingDown()) {
@@ -144,7 +178,12 @@ public class BattleScene implements Scene {
         if (countdown.isCountingDown()) {
             BitmapFont countdownFont = gameRunner.assets.getFont(GameAssets.countdownFont);
             Color toRestore = countdownFont.getColor().cpy();
-            countdownFont.setColor(Color.YELLOW);
+
+            if (sendBallTo.equals(ToReceive.Blue)) {
+                countdownFont.setColor(Color.BLUE);
+            } else {
+                countdownFont.setColor(Color.RED);
+            }
             countdownFont.draw(
                 gameRunner.batch,
                 String.format("%d", countdown.getSecondToDisplay()),
