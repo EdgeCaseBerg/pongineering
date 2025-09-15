@@ -2,6 +2,7 @@ package spare.peetseater.peng.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
 import spare.peetseater.peng.Sounds;
+import spare.peetseater.peng.inputs.PADDLE_COMMAND;
+import spare.peetseater.peng.inputs.PCPaddleInputProcessor;
 import spare.peetseater.peng.objects.Ball;
 import spare.peetseater.peng.objects.Countdown;
 import spare.peetseater.peng.objects.Paddle;
@@ -41,6 +44,8 @@ public class BattleScene implements Scene {
     List<AssetDescriptor<?>> assets;
     Countdown countdown;
     Sounds sounds;
+    PCPaddleInputProcessor redInputProcessor;
+    PCPaddleInputProcessor blueInputProcessor;
 
     public BattleScene(GameRunner gameRunner) {
         this.gameRunner = gameRunner;
@@ -48,7 +53,16 @@ public class BattleScene implements Scene {
         redScore = blueScore = 0;
 
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
+        redInputProcessor = new PCPaddleInputProcessor(Input.Keys.W, Input.Keys.S);
+
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
+        blueInputProcessor = new PCPaddleInputProcessor(Input.Keys.UP, Input.Keys.DOWN);
+
+        InputMultiplexer multiPlexer = new InputMultiplexer();
+        multiPlexer.addProcessor(redInputProcessor);
+        multiPlexer.addProcessor(blueInputProcessor);
+        Gdx.input.setInputProcessor(multiPlexer);
+
         sendBallTo = MathUtils.randomBoolean() ? ToReceive.Blue : ToReceive.Red;
         resetBall();
         resetCountdown();
@@ -100,16 +114,17 @@ public class BattleScene implements Scene {
     @Override
     public void update(float delta) {
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (redInputProcessor.getCurrentCommand().equals(PADDLE_COMMAND.UP)) {
             red.moveUp(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (redInputProcessor.getCurrentCommand().equals(PADDLE_COMMAND.DOWN)) {
             red.moveDown(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+
+        if (blueInputProcessor.getCurrentCommand().equals(PADDLE_COMMAND.UP)) {
             blue.moveUp(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (blueInputProcessor.getCurrentCommand().equals(PADDLE_COMMAND.DOWN)) {
             blue.moveDown(delta);
         }
 
