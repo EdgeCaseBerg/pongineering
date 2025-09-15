@@ -2,7 +2,7 @@ package spare.peetseater.peng.inputs;
 
 import com.badlogic.gdx.InputAdapter;
 
-public class PCPaddleInputProcessor extends InputAdapter {
+public class PCPaddleInputProcessor extends InputAdapter implements PaddleInputProcessor {
 
     private final int upKey;
     private final int downKey;
@@ -14,6 +14,7 @@ public class PCPaddleInputProcessor extends InputAdapter {
         this.currentDecision = PADDLE_COMMAND.NOTHING;
     }
 
+    @Override
     public PADDLE_COMMAND getCurrentCommand() {
         return this.currentDecision;
     }
