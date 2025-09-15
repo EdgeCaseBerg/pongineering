@@ -7,10 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import spare.peetseater.peng.scenes.BattleScene;
-import spare.peetseater.peng.scenes.Scene;
-import spare.peetseater.peng.scenes.TitleScreen;
-import spare.peetseater.peng.scenes.WinScene;
+import spare.peetseater.peng.inputs.PlayerSet;
+import spare.peetseater.peng.scenes.*;
 
 import java.util.Stack;
 
@@ -24,9 +22,11 @@ public class GameRunner implements ApplicationListener {
     OrthographicCamera camera;
     Stack<Scene> scenes;
     FitViewport viewport;
+    PlayerSet playerSet;
 
     @Override
     public void create() {
+        playerSet = PlayerSet.CPU_VS_CPU;
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -83,6 +83,14 @@ public class GameRunner implements ApplicationListener {
         batch.end();
     }
 
+    public void setPlayersSet(PlayerSet playerSet) {
+        this.playerSet = playerSet;
+    }
+
+    public PlayerSet getPlayersSet() {
+        return this.playerSet;
+    }
+
     @Override
     public void pause() {
 
@@ -99,4 +107,5 @@ public class GameRunner implements ApplicationListener {
            scenes.pop();
         }
     }
+
 }

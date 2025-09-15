@@ -16,10 +16,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.peng.GameAssets;
 import spare.peetseater.peng.GameRunner;
 import spare.peetseater.peng.Sounds;
-import spare.peetseater.peng.inputs.CPUPaddleProcessor;
-import spare.peetseater.peng.inputs.PADDLE_COMMAND;
-import spare.peetseater.peng.inputs.PCPaddleInputProcessor;
-import spare.peetseater.peng.inputs.PaddleInputProcessor;
+import spare.peetseater.peng.inputs.*;
 import spare.peetseater.peng.objects.Ball;
 import spare.peetseater.peng.objects.Countdown;
 import spare.peetseater.peng.objects.Paddle;
@@ -58,19 +55,29 @@ public class BattleScene implements Scene {
         red = new Paddle(18, VIRTUAL_HEIGHT / 2f);
         blue = new Paddle(VIRTUAL_WIDTH - Paddle.WIDTH * 2, VIRTUAL_HEIGHT / 2f);
         sendBallTo = MathUtils.randomBoolean() ? ToReceive.Blue : ToReceive.Red;
-        redInputProcessor = new CPUPaddleProcessor(null, red);
-        blueInputProcessor = new CPUPaddleProcessor(null, blue);
+
+        // Reset the input processor.
+        Gdx.input.setInputProcessor(null);
+        switch (gameRunner.getPlayersSet()) {
+            case PLAYER_VS_PLAYER:
+                redInputProcessor = new PCPaddleInputProcessor(Input.Keys.W, Input.Keys.S);
+                blueInputProcessor = new PCPaddleInputProcessor(Input.Keys.UP, Input.Keys.DOWN);
+                InputMultiplexer multiPlexer = new InputMultiplexer();
+                multiPlexer.addProcessor((InputProcessor) redInputProcessor);
+                multiPlexer.addProcessor((InputProcessor) blueInputProcessor);
+                Gdx.input.setInputProcessor(multiPlexer);
+                break;
+            case PLAYER_VS_CPU:
+                redInputProcessor = new CPUPaddleProcessor(null, red);
+                blueInputProcessor = new PCPaddleInputProcessor(Input.Keys.UP, Input.Keys.DOWN);
+                Gdx.input.setInputProcessor((InputProcessor) blueInputProcessor);
+                break;
+            case CPU_VS_CPU:
+                redInputProcessor = new CPUPaddleProcessor(null, red);
+                blueInputProcessor = new CPUPaddleProcessor(null, blue);
+                break;
+        }
         resetBall();
-
-//        redInputProcessor = new PCPaddleInputProcessor(Input.Keys.W, Input.Keys.S);
-
-//        blueInputProcessor = new PCPaddleInputProcessor(Input.Keys.UP, Input.Keys.DOWN);
-
-//        InputMultiplexer multiPlexer = new InputMultiplexer();
-//        multiPlexer.addProcessor((InputProcessor) redInputProcessor);
-//        multiPlexer.addProcessor((InputProcessor) blueInputProcessor);
-//        Gdx.input.setInputProcessor(multiPlexer);
-
         resetCountdown();
 
         assets = new LinkedList<>();
@@ -94,8 +101,13 @@ public class BattleScene implements Scene {
 
     private void resetBall() {
         ball = new Ball(VIRTUAL_WIDTH/2f, VIRTUAL_HEIGHT/2f);
-        ((CPUPaddleProcessor)redInputProcessor).setBall(ball);
-        ((CPUPaddleProcessor)blueInputProcessor).setBall(ball);
+        if (redInputProcessor instanceof CPUPaddleProcessor) {
+            ((CPUPaddleProcessor)redInputProcessor).setBall(ball);
+        }
+        if (blueInputProcessor instanceof CPUPaddleProcessor) {
+            ((CPUPaddleProcessor)blueInputProcessor).setBall(ball);
+        }
+
         float from, to;
         switch (sendBallTo) {
             case Red:

@@ -55,7 +55,7 @@ public class TitleScreen implements Scene {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             switch (selectedButton) {
                 case START_BUTTON_CHOICE:
-                    gameRunner.changeToNewScene(new BattleScene(gameRunner));
+                    gameRunner.changeToNewScene(new GameModeSelectScene(gameRunner));
                     break;
                 case QUIT_BUTTON_CHOICE:
                     Gdx.app.exit();
@@ -112,8 +112,6 @@ public class TitleScreen implements Scene {
             VIRTUAL_WIDTH /3f, buttonsQuitY,
             VIRTUAL_WIDTH /3f, Align.left, false
         );
-
-
     }
 
 }
